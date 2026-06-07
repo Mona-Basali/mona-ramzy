@@ -1,0 +1,393 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>استبيان التوافق بين منى 💗 ورمزي 💙</title>
+  <style>
+    :root{
+      --bg:#faf7fb; --card:#ffffff; --text:#2b2230; --muted:#6b6070;
+      --primary:#7b3f98; --primary2:#2f70b7; --border:#eadff0; --ok:#147a44;
+      --warn:#b56a00; --danger:#b42318;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Tahoma,Arial,sans-serif;background:linear-gradient(180deg,#fbf4ff,#f7fbff);color:var(--text);line-height:1.8}
+    .wrap{max-width:980px;margin:0 auto;padding:22px}
+    .hero{background:var(--card);border:1px solid var(--border);border-radius:22px;padding:26px;box-shadow:0 12px 35px rgba(80,40,110,.08);margin-bottom:18px}
+    h1{margin:0 0 8px;font-size:30px;color:var(--primary)}
+    h2{font-size:22px;margin:26px 0 12px;color:#3c2a45;border-right:5px solid var(--primary);padding-right:10px}
+    h3{margin:18px 0 8px}
+    .note{color:var(--muted);font-size:15px}
+    .card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:18px;margin:14px 0;box-shadow:0 8px 22px rgba(80,40,110,.05)}
+    label{font-weight:700}
+    input[type=text], textarea, select{
+      width:100%;padding:12px;border:1px solid var(--border);border-radius:12px;background:#fff;font-size:16px;margin-top:6px
+    }
+    textarea{min-height:90px;resize:vertical}
+    .scale{display:grid;grid-template-columns:1fr repeat(5,54px);gap:8px;align-items:center;border-top:1px solid #f1e7f5;padding:12px 0}
+    .scale:first-child{border-top:0}
+    .q{font-weight:600}
+    .radioBox{text-align:center}
+    .radioBox input{transform:scale(1.15)}
+    .headScale{display:grid;grid-template-columns:1fr repeat(5,54px);gap:8px;align-items:center;color:var(--muted);font-size:13px;margin-top:8px}
+    .btns{display:flex;gap:10px;flex-wrap:wrap;margin-top:20px}
+    button{border:0;border-radius:14px;padding:13px 18px;font-size:16px;font-weight:800;cursor:pointer}
+    .primary{background:var(--primary);color:white}
+    .secondary{background:#eef4ff;color:#1f5b97}
+    .danger{background:#fff1f0;color:var(--danger);border:1px solid #ffd1cc}
+    .success{display:none;background:#ecfdf3;border:1px solid #b7efcf;color:var(--ok);border-radius:18px;padding:22px;margin-top:18px;font-size:20px;font-weight:800;text-align:center}
+    .error{display:none;background:#fff6ed;border:1px solid #ffd8a8;color:#9a4b00;border-radius:14px;padding:12px;margin-top:12px}
+    .small{font-size:13px;color:var(--muted)}
+    .admin{border:2px dashed #d7c1e6;background:#fff}
+    table{width:100%;border-collapse:collapse;margin-top:14px;background:#fff;border-radius:12px;overflow:hidden}
+    th,td{border:1px solid #eee;padding:8px;text-align:center;font-size:14px}
+    th{background:#f5eff8}
+    .badge{display:inline-block;padding:4px 10px;border-radius:999px;font-weight:800}
+    .good{background:#ecfdf3;color:#147a44}.mid{background:#fffbeb;color:#b56a00}.low{background:#fff1f0;color:#b42318}
+    @media(max-width:720px){
+      .scale,.headScale{grid-template-columns:1fr repeat(5,38px);gap:4px}
+      .radioBox{font-size:12px}
+      h1{font-size:24px}
+      .wrap{padding:12px}
+    }
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <section class="hero">
+    <h1>استبيان التوافق بين منى 💗 ورمزي 💙</h1>
+    <p class="note">
+      بسم الله، هذا الاستبيان صُمم لمساعدتنا على فهم بعضنا بشكل أفضل والتعرف على نقاط التوافق والمواضيع التي تحتاج إلى نقاش قبل اتخاذ أي خطوة مستقبلية.
+      لا توجد إجابات صحيحة أو خاطئة، والمطلوب فقط الصدق والوضوح. بعد الإرسال ستظهر رسالة تأكيد فقط.
+    </p>
+    <p class="small">
+      مقياس الإجابة: 1 = لا أوافق أبداً، 2 = لا أوافق، 3 = محايد، 4 = أوافق، 5 = أوافق بشدة.
+    </p>
+  </section>
+
+  <form id="surveyForm">
+    <div class="card">
+      <label>من يجيب؟</label>
+      <select id="person" required>
+        <option value="">اختاري/اختر</option>
+        <option value="منى 💗">منى 💗</option>
+        <option value="رمزي 💙">رمزي 💙</option>
+      </select>
+    </div>
+
+    <div id="questions"></div>
+
+    <section class="card">
+      <h2>أسئلة مفتوحة</h2>
+      <div id="openQuestions"></div>
+    </section>
+
+    <div class="btns">
+      <button type="submit" class="primary">إرسال الإجابة</button>
+      <button type="button" class="secondary" onclick="saveDraft()">حفظ مؤقت على جهازي</button>
+      <button type="button" class="danger" onclick="clearDraft()">مسح الإجابات</button>
+    </div>
+
+    <div id="error" class="error"></div>
+    <div id="success" class="success">تم إرسال إجابتك بنجاح ✅</div>
+  </form>
+
+  <section class="card admin" id="adminPanel">
+    <h2>لوحة المقارنة الخاصة بـ منى 💗 فقط</h2>
+    <p class="note">
+      هذه اللوحة لا تُظهر للخطيب أي نتيجة. بعد ربط Google Sheets أو نسخ الإجابات هنا، تستطيعين حساب التوافق.
+      إذا كنتِ لا تريدين ظهور هذه اللوحة في الرابط المرسل له، ارفعي نسخة ثانية واحذفي هذا القسم.
+    </p>
+    <div class="btns">
+      <button type="button" class="secondary" onclick="compareLocal()">حساب المقارنة من الإجابات المحفوظة على هذا الجهاز</button>
+      <button type="button" class="secondary" onclick="exportLocal()">تحميل الإجابات المحفوظة JSON</button>
+    </div>
+    <div id="analysis"></div>
+  </section>
+</div>
+
+<script>
+/*
+  مهم:
+  GitHub Pages موقع ثابت ولا يحفظ الإجابات وحده.
+  حتى تصلك الإجابات في Google Sheets:
+  1) أنشئي Google Apps Script Web App.
+  2) ضعي رابط Web App بين علامات التنصيص هنا.
+  مثال:
+  const SCRIPT_URL = "https://script.google.com/macros/s/XXXXX/exec";
+*/
+const SCRIPT_URL = "";
+
+const sections = [
+  ["القيم والمبادئ", [
+    "الزواج شراكة ومسؤولية طويلة المدى.",
+    "الاحترام أهم من الحب وحده.",
+    "الصدق أساس أي علاقة ناجحة.",
+    "أحرص على الوفاء بالوعود.",
+    "أتقبل الاختلاف في الرأي.",
+    "أؤمن بالتشاور في القرارات المصيرية.",
+    "تطوير الذات أمر مهم بالنسبة لي.",
+    "أبحث عن الاستقرار أكثر من المغامرة."
+  ]],
+  ["التواصل", [
+    "أستطيع التعبير عن مشاعري بوضوح.",
+    "أستمع جيداً قبل الرد.",
+    "أتقبل النقد البناء.",
+    "أستطيع الاعتذار عند الخطأ.",
+    "لا أحب العقاب بالصمت.",
+    "أفضّل حل المشكلات مباشرة.",
+    "أشعر بالراحة عند الحديث عن المواضيع الحساسة.",
+    "أحترم اختلاف وجهات النظر."
+  ]],
+  ["إدارة الخلاف", [
+    "أتحكم بكلامي أثناء الغضب.",
+    "لا أستخدم الإهانة أو التقليل من الآخر.",
+    "أبحث عن الحل أكثر من الفوز بالنقاش.",
+    "أستطيع التسامح بعد الخلاف.",
+    "أحتاج وقتاً للهدوء قبل النقاش أحياناً.",
+    "أؤمن أن الخلاف الطبيعي لا يهدد العلاقة."
+  ]],
+  ["المسؤولية", [
+    "ألتزم بمواعيدي.",
+    "أتحمل مسؤولية قراراتي.",
+    "يمكن الاعتماد علي وقت الأزمات.",
+    "أستطيع إدارة وقتي بشكل جيد.",
+    "ألتزم بإنهاء ما أبدأه.",
+    "أواجه المشكلات بدلاً من الهروب منها."
+  ]],
+  ["الاستقرار النفسي", [
+    "أعتبر نفسي شخصاً متزناً عاطفياً.",
+    "لا أتخذ قرارات مهمة أثناء الانفعال.",
+    "أتعامل مع الضغوط بطريقة صحية.",
+    "أستطيع التكيف مع التغيرات.",
+    "لا أحتاج للسيطرة على كل شيء حولي.",
+    "أطلب المساعدة عند الحاجة."
+  ]],
+  ["الخصوصية والمساحة الشخصية", [
+    "أؤمن بأهمية وجود مساحة شخصية لكل زوج.",
+    "أتفهم حاجة الطرف الآخر لقضاء وقت مع نفسه.",
+    "لا أحب المراقبة أو التفتيش.",
+    "أثق بالطرف الآخر ما لم يثبت العكس.",
+    "أؤمن بأهمية وجود هوايات خاصة لكل شخص.",
+    "الخصوصية لا تعني إخفاء الأسرار."
+  ]],
+  ["المال", [
+    "التخطيط المالي مهم بالنسبة لي.",
+    "أفضل مناقشة الأمور المالية بوضوح.",
+    "الادخار جزء أساسي من الحياة.",
+    "لا أتخذ قرارات مالية كبيرة بمفردي بعد الزواج.",
+    "أرى أهمية وجود أهداف مالية مشتركة.",
+    "ألتزم بالمسؤوليات المالية المترتبة علي."
+  ]],
+  ["العمل والطموح", [
+    "أؤمن بأهمية التطور المهني.",
+    "أدعم طموح شريك حياتي.",
+    "أتقبل انشغال الشريك أحياناً بسبب عمله.",
+    "أرى أن التعليم والتطوير المستمر مهمان.",
+    "أحترم أهداف الطرف الآخر المهنية.",
+    "لا أتوقع أن يتخلى شريك حياتي عن أحلامه من أجلي."
+  ]],
+  ["نمط الحياة", [
+    "أحب الحياة المنظمة.",
+    "النوم المنتظم مهم بالنسبة لي.",
+    "أهتم بصحتي الجسدية.",
+    "الرياضة جزء مهم من حياتي.",
+    "أفضل التخطيط المسبق.",
+    "أحب الهدوء أكثر من كثرة المناسبات الاجتماعية."
+  ]],
+  ["الأسرة والأهل", [
+    "علاقتي بعائلتي مهمة جداً.",
+    "يجب أن تكون هناك حدود صحية لتدخل الأهل.",
+    "أتوقع الاحترام المتبادل بين الطرفين والأهل.",
+    "أستطيع الموازنة بين الزوج/الزوجة والأهل.",
+    "لا أقبل أن يدير الآخرون حياتنا الزوجية.",
+    "الحوار أفضل من نقل المشاكل للأهل."
+  ]],
+  ["الأبناء والتربية", [
+    "أرغب بإنجاب أبناء مستقبلاً.",
+    "أؤمن بمشاركة الوالدين في التربية.",
+    "الحوار أفضل من العقاب القاسي.",
+    "التعليم أولوية مهمة.",
+    "يجب غرس المسؤولية والاستقلالية في الأبناء.",
+    "أتقبل اختلاف شخصيات الأبناء."
+  ]]
+];
+
+const openQs = [
+  "ما أكثر ثلاثة أمور تجعلك تشعر بالأمان في الزواج؟",
+  "ما أكثر ثلاثة أمور تخيفك في الزواج؟",
+  "ما أهم صفات الزوج/الزوجة الناجح(ة) في نظرك؟",
+  "كيف تتصرف عندما تكون تحت ضغط شديد؟",
+  "ما أكبر درس تعلمته من تجاربك السابقة؟",
+  "ما توقعاتك لأول سنة زواج؟",
+  "كيف تتصور حياتك بعد عشر سنوات؟",
+  "ما الأمور التي تعتبرها غير قابلة للتنازل؟",
+  "ما أكثر شيء تريد أن يفهمه شريك حياتك عنك؟",
+  "ما الذي قد يؤدي إلى فشل العلاقة الزوجية في رأيك؟"
+];
+
+let qCounter = 0;
+const qMeta = [];
+
+function render(){
+  const container = document.getElementById("questions");
+  sections.forEach((sec, sIndex)=>{
+    const [title, qs] = sec;
+    const block = document.createElement("section");
+    block.className = "card";
+    block.innerHTML = `<h2>${title}</h2>
+      <div class="headScale"><div></div><div>1</div><div>2</div><div>3</div><div>4</div><div>5</div></div>`;
+    qs.forEach((q)=>{
+      qCounter++;
+      qMeta.push({id:`q${qCounter}`, text:q, section:title});
+      const row = document.createElement("div");
+      row.className = "scale";
+      row.innerHTML = `<div class="q">${qCounter}. ${q}</div>` +
+        [1,2,3,4,5].map(n=>`<label class="radioBox"><input type="radio" name="q${qCounter}" value="${n}" required></label>`).join("");
+      block.appendChild(row);
+    });
+    container.appendChild(block);
+  });
+
+  const oq = document.getElementById("openQuestions");
+  openQs.forEach((q,i)=>{
+    const div = document.createElement("div");
+    div.className = "card";
+    div.innerHTML = `<label>${i+1}. ${q}</label><textarea name="open${i+1}" required></textarea>`;
+    oq.appendChild(div);
+  });
+
+  restoreDraft();
+}
+render();
+
+function collectData(){
+  const person = document.getElementById("person").value;
+  if(!person) throw new Error("اختاري/اختر من يجيب أولاً.");
+  const answers = {};
+  qMeta.forEach(q=>{
+    const checked = document.querySelector(`input[name="${q.id}"]:checked`);
+    if(!checked) throw new Error("يوجد سؤال لم تتم الإجابة عليه.");
+    answers[q.id] = Number(checked.value);
+  });
+  const open = {};
+  openQs.forEach((_,i)=> open[`open${i+1}`] = document.querySelector(`[name="open${i+1}"]`).value.trim());
+  return {
+    person,
+    timestamp:new Date().toISOString(),
+    answers,
+    open,
+    meta:qMeta
+  };
+}
+
+document.getElementById("surveyForm").addEventListener("submit", async (e)=>{
+  e.preventDefault();
+  const err = document.getElementById("error");
+  const ok = document.getElementById("success");
+  err.style.display = "none"; ok.style.display = "none";
+  try{
+    const data = collectData();
+
+    // حفظ محلي احتياطي على نفس الجهاز
+    localStorage.setItem("premarital_" + data.person, JSON.stringify(data));
+
+    // إرسال إلى Google Sheets إذا تمت إضافة رابط Apps Script
+    if(SCRIPT_URL){
+      await fetch(SCRIPT_URL, {
+        method:"POST",
+        mode:"no-cors",
+        headers:{"Content-Type":"application/json"},
+        body: JSON.stringify(data)
+      });
+    }
+
+    ok.style.display = "block";
+    window.scrollTo({top:0, behavior:"smooth"});
+  }catch(ex){
+    err.textContent = ex.message || "حدث خطأ. حاولي مرة أخرى.";
+    err.style.display = "block";
+  }
+});
+
+function saveDraft(){
+  try{
+    const data = collectData();
+    localStorage.setItem("draft_premarital", JSON.stringify(data));
+    alert("تم حفظ الإجابات مؤقتاً على هذا الجهاز.");
+  }catch(ex){ alert(ex.message); }
+}
+
+function restoreDraft(){
+  const raw = localStorage.getItem("draft_premarital");
+  if(!raw) return;
+  try{
+    const d = JSON.parse(raw);
+    if(d.person) document.getElementById("person").value = d.person;
+    Object.entries(d.answers || {}).forEach(([k,v])=>{
+      const el = document.querySelector(`input[name="${k}"][value="${v}"]`);
+      if(el) el.checked = true;
+    });
+    Object.entries(d.open || {}).forEach(([k,v])=>{
+      const el = document.querySelector(`[name="${k}"]`);
+      if(el) el.value = v;
+    });
+  }catch(e){}
+}
+
+function clearDraft(){
+  if(confirm("هل تريدين/تريد مسح الإجابات الحالية؟")){
+    localStorage.removeItem("draft_premarital");
+    document.getElementById("surveyForm").reset();
+  }
+}
+
+function compareLocal(){
+  const m = JSON.parse(localStorage.getItem("premarital_منى 💗") || "null");
+  const r = JSON.parse(localStorage.getItem("premarital_رمزي 💙") || "null");
+  const out = document.getElementById("analysis");
+  if(!m || !r){
+    out.innerHTML = `<p class="note">لا توجد إجابتان محفوظتان على هذا الجهاز. المقارنة المحلية تعمل فقط إذا تمت إجابة منى 💗 ورمزي 💙 على نفس الجهاز. للمقارنة من جهازين مختلفين اربطيه بـ Google Sheets.</p>`;
+    return;
+  }
+  let rows = "";
+  let total = 0;
+  const bySection = {};
+  qMeta.forEach((q, idx)=>{
+    const mv = m.answers[q.id], rv = r.answers[q.id];
+    const diff = Math.abs(mv-rv);
+    const score = Math.round(100-(diff/4*100));
+    total += score;
+    if(!bySection[q.section]) bySection[q.section] = [];
+    bySection[q.section].push(score);
+    if(diff >= 2){
+      rows += `<tr><td>${idx+1}</td><td style="text-align:right">${q.text}</td><td>${mv}</td><td>${rv}</td><td>${diff}</td><td>${score}%</td></tr>`;
+    }
+  });
+  const avg = Math.round(total/qMeta.length);
+  const badgeClass = avg>=80 ? "good" : (avg>=65 ? "mid" : "low");
+  let secHtml = "<h3>التوافق حسب المحاور</h3><table><tr><th>المحور</th><th>النسبة</th></tr>";
+  Object.entries(bySection).forEach(([sec, arr])=>{
+    const s = Math.round(arr.reduce((a,b)=>a+b,0)/arr.length);
+    secHtml += `<tr><td>${sec}</td><td>${s}%</td></tr>`;
+  });
+  secHtml += "</table>";
+  out.innerHTML = `<h3>نسبة التوافق العامة: <span class="badge ${badgeClass}">${avg}%</span></h3>` + secHtml +
+    `<h3>أسئلة تحتاج نقاشاً</h3>` +
+    (rows ? `<table><tr><th>#</th><th>السؤال</th><th>منى 💗</th><th>رمزي 💙</th><th>الفرق</th><th>التوافق</th></tr>${rows}</table>` : `<p class="good">لا توجد فروقات كبيرة.</p>`);
+}
+
+function exportLocal(){
+  const payload = {
+    "منى": JSON.parse(localStorage.getItem("premarital_منى 💗") || "null"),
+    "رمزي": JSON.parse(localStorage.getItem("premarital_رمزي 💙") || "null")
+  };
+  const blob = new Blob([JSON.stringify(payload,null,2)], {type:"application/json"});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url; a.download = "premarital_answers.json"; a.click();
+  URL.revokeObjectURL(url);
+}
+</script>
+</body>
+</html>
